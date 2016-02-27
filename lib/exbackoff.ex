@@ -1,5 +1,11 @@
-defmodule Exbackoff do
+defmodule ExBackoff do
   use Bitwise
+
+  @moduledoc """
+  ExBackoff is an Elixir library to deal with exponential backoffs and timers
+  to be used within OTP processes when dealing with cyclical events, such as
+  reconnections, or generally retrying things.
+  """
 
   @typep max :: pos_integer | :infinity
 
@@ -81,7 +87,7 @@ defmodule Exbackoff do
   """
   @spec init(pos_integer, max, pid | nil, any | nil) :: backoff
   def init(start, max, dest, value) do
-    %Exbackoff{start: start, current: start, max: max, value: value, dest: dest}
+    %ExBackoff{start: start, current: start, max: max, value: value, dest: dest}
   end
 
   @doc """
@@ -90,7 +96,7 @@ defmodule Exbackoff do
   is purely a convenience function.
   """
   @spec fire(backoff) :: reference
-  def fire(%Exbackoff{current: delay, value: value, dest: dest}) do
+  def fire(%ExBackoff{current: delay, value: value, dest: dest}) do
     :erlang.start_timer(delay, dest, value)
   end
 
@@ -98,32 +104,32 @@ defmodule Exbackoff do
   Reads the current backoff value.
   """
   @spec get(backoff) :: pos_integer
-  def get(%Exbackoff{current: delay}), do: delay
+  def get(%ExBackoff{current: delay}), do: delay
 
   @doc """
   Swaps between the states of the backoff.
   """
   @spec type(backoff, :normal | :jitter) :: backoff
-  def type(b = %Exbackoff{}, :jitter), do: %{b | type: :jitter}
-  def type(b = %Exbackoff{}, :normal), do: %{b | type: :normal}
+  def type(b = %ExBackoff{}, :jitter), do: %{b | type: :jitter}
+  def type(b = %ExBackoff{}, :normal), do: %{b | type: :normal}
 
   @doc """
   Increments the value and return the new state with the `new_delay`
   """
   @spec fail(backoff) :: {pos_integer, backoff}
-  def fail(b = %Exbackoff{current: delay, max: :infinity, type: :normal}) do
+  def fail(b = %ExBackoff{current: delay, max: :infinity, type: :normal}) do
     new_delay = increment(delay)
     {new_delay,  %{b | current: new_delay}}
   end
-  def fail(b = %Exbackoff{current: delay, max: max, type: :normal}) do
+  def fail(b = %ExBackoff{current: delay, max: max, type: :normal}) do
     new_delay = increment(delay, max)
     {new_delay, %{b | current: new_delay}}
   end
-  def fail(b = %Exbackoff{current: delay, max: :infinity, type: :jitter}) do
+  def fail(b = %ExBackoff{current: delay, max: :infinity, type: :jitter}) do
     new_delay = rand_increment(delay)
     {new_delay, %{b | current: new_delay}}
   end
-  def fail(b = %Exbackoff{current: delay, max: max, type: :jitter}) do
+  def fail(b = %ExBackoff{current: delay, max: max, type: :jitter}) do
     new_delay = rand_increment(delay, max)
     {new_delay, %{b | current: new_delay}}
   end
@@ -132,7 +138,7 @@ defmodule Exbackoff do
   resets the values
   """
   @spec succeed(backoff) :: {pos_integer, backoff}
-  def succeed(b = %Exbackoff{start: start}) do
+  def succeed(b = %ExBackoff{start: start}) do
     {start, %{b | current: start}}
   end
 end

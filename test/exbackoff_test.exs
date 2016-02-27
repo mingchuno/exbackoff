@@ -1,14 +1,14 @@
-defmodule ExbackoffTest do
+defmodule ExBackoffTest do
   use ExUnit.Case, async: false
   use ExCheck
-  doctest Exbackoff
+  doctest ExBackoff
 
   @doc """
   Increment operations are always returning bigger
   and bigger values, assuming positive integers
   """
   property :increment_increases do
-    for_all x in pos_integer, do: Exbackoff.increment(x) > x
+    for_all x in pos_integer, do: ExBackoff.increment(x) > x
   end
 
   @doc """
@@ -17,10 +17,10 @@ defmodule ExbackoffTest do
   """
   property :increment_ceiled_increases do
     for_all {x, y} in such_that({xx, yy} in {pos_integer, pos_integer} when xx < yy) do
-      Exbackoff.increment(x, y) <= y
+      ExBackoff.increment(x, y) <= y
       and
-      (Exbackoff.increment(x, y) > x or
-        (Exbackoff.increment(x, y) === x and x === y))
+      (ExBackoff.increment(x, y) > x or
+        (ExBackoff.increment(x, y) === x and x === y))
     end
   end
 
@@ -30,7 +30,7 @@ defmodule ExbackoffTest do
   """
   property :rand_increment_increases do
     for_all x in pos_integer do
-      delay = Exbackoff.rand_increment(x)
+      delay = ExBackoff.rand_increment(x)
       delay >= x and x * 3 >= delay
     end
   end
@@ -41,7 +41,7 @@ defmodule ExbackoffTest do
   """
   property :rand_increment_ceiled_increases do
     for_all {x, y} in such_that({xx, yy} in {pos_integer, pos_integer} when xx < yy) do
-      delay = Exbackoff.rand_increment(x, y)
+      delay = ExBackoff.rand_increment(x, y)
       delay <= y and
       x * 3 >= delay and
       (delay >= x or
