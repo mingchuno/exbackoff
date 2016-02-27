@@ -1,5 +1,9 @@
 # ExBackoff
 
+[![Build Status](https://travis-ci.org/mingchuno/exbackoff.svg?branch=master)](https://travis-ci.org/mingchuno/exbackoff)
+[![Hex Version](http://img.shields.io/hexpm/v/exbackoff.svg)](https://hex.pm/packages/exbackoff)
+[![Inline docs](http://inch-ci.org/github/mingchuno/exbackoff.svg?branch=master)](http://inch-ci.org/github/mingchuno/exbackoff)
+
 ExBackoff is an Erlang library to deal with exponential backoffs and timers to
 be used within OTP processes when dealing with cyclical events, such as
 reconnections, or generally retrying things. This is port of Erlang counterpart
