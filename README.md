@@ -14,14 +14,12 @@ in [ferd/backoff](https://github.com/ferd/backoff).
 [Available in Hex](https://hex.pm/packages/exbackoff), the package can be installed as:
 
   1. Add exbackoff to your list of dependencies in `mix.exs`:
-        ```
-        [{:exbackoff, "~> 0.0.2"}]
-        ```
+
+        [{:exbackoff, "~> 0.0.3"}]
 
   2. Ensure exbackoff is started before your application:
-        ```
+
         [applications: [:exbackoff]]
-        ```
 
 
 # Modes of Operation
@@ -174,3 +172,7 @@ enough use cases with multiple timers, event cancellation, and plenty of other
 things that can happen with them. Backoff makes it easy to fire them for
 the right interval, but *it is not* a wrapper around Erlang timers for all
 operations.
+
+## TODO
+
+1. complate the tests
