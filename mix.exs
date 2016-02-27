@@ -25,28 +25,16 @@ defmodule Exbackoff.Mixfile do
     """
   end
 
-  # Configuration for the OTP application
-  #
-  # Type "mix help compile.app" for more information
   def application do
     [applications: [:logger]]
   end
 
-  # Dependencies can be Hex packages:
-  #
-  #   {:mydep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1.0"}
-  #
-  # Type "mix help deps" for more examples and options
   defp deps do
     [
       {:excheck, "~> 0.3.2", only: :test},
-      {:earmark, "~> 0.1", only: :docs},
-      {:ex_doc, "~> 0.10", only: :docs},
-      {:inch_ex, "~> 0.4", only: :docs},
+      {:earmark, "~> 0.2", only: :docs},
+      {:ex_doc, "~> 0.11", only: :docs},
+      {:inch_ex, "~> 0.5", only: :docs},
       {:triq, github: "krestenkrab/triq", only: :test}
     ]
   end

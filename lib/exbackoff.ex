@@ -9,6 +9,12 @@ defmodule Exbackoff do
              type: :normal,
              value: nil,
              dest: nil]
+
+  @typedoc """
+  struct contain state of the backoff module including the start, current and
+  max value. Type of the backoff `:normal` or `:jitter`. Value to send and the
+  destination when need to fire off message whe :timeout
+  """
   @type backoff :: %__MODULE__{ start: pos_integer,
                                 max: max,
                                 current: pos_integer,
@@ -22,6 +28,9 @@ defmodule Exbackoff do
   @spec increment(pos_integer) :: pos_integer
   def increment(n) when is_integer(n), do: n <<< 1
 
+  @doc """
+  Increments the value (but won't excess the max value).
+  """
   @spec increment(pos_integer, pos_integer) :: pos_integer
   def increment(n, max), do: min(increment(n), max)
 
@@ -39,6 +48,9 @@ defmodule Exbackoff do
     n + :random.uniform(width + 1) - 1
   end
 
+  @doc """
+  Do the random increments. It wont excess the max value
+  """
   @spec rand_increment(pos_integer, pos_integer) :: pos_integer
   def rand_increment(n, max) do
     # The largest interval for [0.5 * Time, 1.5 * Time] with maximum Max is
@@ -95,6 +107,9 @@ defmodule Exbackoff do
   def type(b = %Exbackoff{}, :jitter), do: %{b | type: :jitter}
   def type(b = %Exbackoff{}, :normal), do: %{b | type: :normal}
 
+  @doc """
+  Increments the value and return the new state with the `new_delay`
+  """
   @spec fail(backoff) :: {pos_integer, backoff}
   def fail(b = %Exbackoff{current: delay, max: :infinity, type: :normal}) do
     new_delay = increment(delay)
@@ -113,6 +128,9 @@ defmodule Exbackoff do
     {new_delay, %{b | current: new_delay}}
   end
 
+  @doc """
+  resets the values
+  """
   @spec succeed(backoff) :: {pos_integer, backoff}
   def succeed(b = %Exbackoff{start: start}) do
     {start, %{b | current: start}}
