@@ -51,7 +51,7 @@ defmodule ExBackoff do
   def rand_increment(n) do
     #  New delay chosen from [N, 3N], i.e. [0.5 * 2N, 1.5 * 2N]
     width = n <<< 1
-    n + :random.uniform(width + 1) - 1
+    n + :rand.uniform(width + 1) - 1
   end
 
   @doc """
@@ -64,7 +64,7 @@ defmodule ExBackoff do
     max_min_delay = div max, 3
     cond do
       max_min_delay === 0 ->
-        :random.uniform(max)
+        :rand.uniform(max)
       n > max_min_delay ->
         rand_increment(max_min_delay)
       true ->
