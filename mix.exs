@@ -1,18 +1,18 @@
 defmodule Exbackoff.Mixfile do
   use Mix.Project
 
-  @version "0.0.3"
+  @version "0.0.4"
 
   def project do
     [app: :exbackoff,
      version: @version,
      elixir: "~> 1.2",
-     description: description,
-     package: package,
+     description: description(),
+     package: package(),
      source_url: "https://github.com/mingchuno/exbackoff",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps,
+     deps: deps(),
      docs: [extras: ["README.md"], main: "readme",
               source_ref: "v#{@version}",
               source_url: "https://github.com/mingchuno/exbackoff"]
