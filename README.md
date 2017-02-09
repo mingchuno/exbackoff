@@ -15,7 +15,7 @@ in [ferd/backoff](https://github.com/ferd/backoff).
 
   1. Add exbackoff to your list of dependencies in `mix.exs`:
 
-        [{:exbackoff, "~> 0.0.3"}]
+        [{:exbackoff, "~> 0.0.4"}]
 
   2. Ensure exbackoff is started before your application:
 
