@@ -6,7 +6,7 @@ defmodule Exbackoff.Mixfile do
   def project do
     [app: :exbackoff,
      version: @version,
-     elixir: "~> 1.2",
+     elixir: "~> 1.4",
      description: description(),
      package: package(),
      source_url: "https://github.com/mingchuno/exbackoff",
