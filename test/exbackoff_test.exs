@@ -8,7 +8,7 @@ defmodule ExBackoffTest do
   and bigger values, assuming positive integers
   """
   property :increment_increases do
-    for_all x in pos_integer, do: ExBackoff.increment(x) > x
+    for_all x in pos_integer(), do: ExBackoff.increment(x) > x
   end
 
   @doc """
@@ -16,7 +16,7 @@ defmodule ExBackoffTest do
   value allowed.
   """
   property :increment_ceiled_increases do
-    for_all {x, y} in such_that({xx, yy} in {pos_integer, pos_integer} when xx < yy) do
+    for_all {x, y} in such_that({xx, yy} in {pos_integer(), pos_integer()} when xx < yy) do
       ExBackoff.increment(x, y) <= y
       and
       (ExBackoff.increment(x, y) > x or
@@ -29,7 +29,7 @@ defmodule ExBackoffTest do
   and bigger values, assuming positive integers
   """
   property :rand_increment_increases do
-    for_all x in pos_integer do
+    for_all x in pos_integer() do
       delay = ExBackoff.rand_increment(x)
       delay >= x and x * 3 >= delay
     end
@@ -40,7 +40,7 @@ defmodule ExBackoffTest do
   value allowed.
   """
   property :rand_increment_ceiled_increases do
-    for_all {x, y} in such_that({xx, yy} in {pos_integer, pos_integer} when xx < yy) do
+    for_all {x, y} in such_that({xx, yy} in {pos_integer(), pos_integer()} when xx < yy) do
       delay = ExBackoff.rand_increment(x, y)
       delay <= y and
       x * 3 >= delay and

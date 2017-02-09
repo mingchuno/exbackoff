@@ -31,11 +31,11 @@ defmodule Exbackoff.Mixfile do
 
   defp deps do
     [
-      {:excheck, "~> 0.3.2", only: :test},
+      {:excheck, "~> 0.5.0", only: :test},
       {:earmark, "~> 0.2", only: :docs},
       {:ex_doc, "~> 0.11", only: :docs},
       {:inch_ex, "~> 0.5", only: :docs},
-      {:triq, github: "krestenkrab/triq", only: :test}
+      {:triq, github: "triqng/triq", only: :test}
     ]
   end
 
