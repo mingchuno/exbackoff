@@ -1,10 +1,10 @@
-# ExBackoff
+# Exbackoff
 
 [![Build Status](https://travis-ci.org/mingchuno/exbackoff.svg?branch=master)](https://travis-ci.org/mingchuno/exbackoff)
 [![Hex Version](http://img.shields.io/hexpm/v/exbackoff.svg)](https://hex.pm/packages/exbackoff)
 [![Inline docs](http://inch-ci.org/github/mingchuno/exbackoff.svg?branch=master)](http://inch-ci.org/github/mingchuno/exbackoff)
 
-ExBackoff is an Erlang library to deal with exponential backoffs and timers to
+Exbackoff is an Erlang library to deal with exponential backoffs and timers to
 be used within OTP processes when dealing with cyclical events, such as
 reconnections, or generally retrying things. This is port of Erlang counterpart
 in [ferd/backoff](https://github.com/ferd/backoff).
@@ -15,7 +15,7 @@ in [ferd/backoff](https://github.com/ferd/backoff).
 
   1. Add exbackoff to your list of dependencies in `mix.exs`:
 
-        [{:exbackoff, "~> 0.0.4"}]
+        [{:exbackoff, "~> 0.1.0"}]
 
   2. Ensure exbackoff is started before your application:
 
@@ -35,42 +35,42 @@ Backoff can be used in 3 main ways:
 Simple backoffs work by calling the functions `increment/1-2`. The function
 with one argument will grow in an unbounded manner:
 
-    1> 1 |> ExBackoff.increment
+    1> 1 |> Exbackoff.increment
     2
-    2> 1 |> ExBackoff.increment |> ExBackoff.increment
+    2> 1 |> Exbackoff.increment |> Exbackoff.increment
     4
-    3> 1 |> ExBackoff.increment |> ExBackoff.increment |> ExBackoff.increment
+    3> 1 |> Exbackoff.increment |> Exbackoff.increment |> Exbackoff.increment
     8
 
 The version with 2 arguments specifies a ceiling to the value:
 
-    4> 2 |> ExBackoff.increment |> ExBackoff.increment |> ExBackoff.increment
+    4> 2 |> Exbackoff.increment |> Exbackoff.increment |> Exbackoff.increment
     16
-    5> 2 |> ExBackoff.increment(10) |> ExBackoff.increment |> ExBackoff.increment
+    5> 2 |> Exbackoff.increment(10) |> Exbackoff.increment |> Exbackoff.increment
     10
 
 ## Simple Backoffs with jitter
 
 Jitter based incremental backoffs increase the back off period for each retry attempt using a randomization function that grows exponentially. They work by calling the functions `rand_increment/1-2`. The function with one argument will grow in an unbounded manner:
 
-    1> 1 |> ExBackoff.rand_increment
+    1> 1 |> Exbackoff.rand_increment
     3
-    2> 1 |> ExBackoff.rand_increment |> ExBackoff.rand_increment
+    2> 1 |> Exbackoff.rand_increment |> Exbackoff.rand_increment
     7
-    3> 1 |> ExBackoff.rand_increment |> ExBackoff.rand_increment |> ExBackoff.rand_increment
+    3> 1 |> Exbackoff.rand_increment |> Exbackoff.rand_increment |> Exbackoff.rand_increment
     19
-    4> 1 |> ExBackoff.rand_increment |> ExBackoff.rand_increment |> ExBackoff.rand_increment
+    4> 1 |> Exbackoff.rand_increment |> Exbackoff.rand_increment |> Exbackoff.rand_increment
     14
-    5> 1 |> ExBackoff.rand_increment |> ExBackoff.rand_increment |> ExBackoff.rand_increment
+    5> 1 |> Exbackoff.rand_increment |> Exbackoff.rand_increment |> Exbackoff.rand_increment
     17
 
 The version with 2 arguments specifies a ceiling to the value. If the
 delay is close to the ceiling the new delay will also be close to the
 ceiling and may be less than the previous delay.
 
-    6> 2 |> ExBackoff.rand_increment |> ExBackoff.rand_increment |> ExBackoff.rand_increment
+    6> 2 |> Exbackoff.rand_increment |> Exbackoff.rand_increment |> Exbackoff.rand_increment
     21
-    7> 2 |> ExBackoff.rand_increment(10) |> ExBackoff.rand_increment |> ExBackoff.rand_increment
+    7> 2 |> Exbackoff.rand_increment(10) |> Exbackoff.rand_increment |> Exbackoff.rand_increment
     10
 
 ## State Backoffs
@@ -81,31 +81,31 @@ maximal value for you. A backoff of that kind is initialized by calling
 (fetches the current timer value), `fail/1` (increments the value), and
 `succeed/1` (resets the value):
 
-    6> b0 = ExBackoff.init(2, 10)
+    6> b0 = Exbackoff.init(2, 10)
     ...
-    7> {_, b1} = ExBackoff.fail(Bb)
+    7> {_, b1} = Exbackoff.fail(Bb)
     {4, ...}
-    8> ExBackoff.get(b1)
+    8> Exbackoff.get(b1)
     4
-    9> {_, b2} = ExBackoff.fail(b1)
+    9> {_, b2} = Exbackoff.fail(b1)
     {8, ...}
-    10> {_, b3} = ExBackoff.fail(b2)
+    10> {_, b3} = Exbackoff.fail(b2)
     {10, ...}
-    11> {_, _} = ExBackoff.fail(b3)
+    11> {_, _} = Exbackoff.fail(b3)
     {10, ...}
 
 And here we've hit the cap with the failures. Now to succeed again:
 
-    12> {_, b4} = ExBackoff.succeed(b3).
+    12> {_, b4} = Exbackoff.succeed(b3).
     {2, ...}
-    13> ExBackoff.get(b4)
+    13> Exbackoff.get(b4)
     2
 
 That way, backoffs carry all their relevant state.
 
 If what you want are unbound exponential backoffs, you can initiate them with:
 
-    14> ExBackoff.init(start, :infinity)
+    14> Exbackoff.init(start, :infinity)
 
 And still use them as usual. The increments will have no upper limit.
 
@@ -114,21 +114,21 @@ And still use them as usual. The increments will have no upper limit.
 You can enable a jitter based incremental backoff by calling `type/2`
 that swaps the state of the backoff:
 
-    1> b0 = ExBackoff.init(2, 30)
+    1> b0 = Exbackoff.init(2, 30)
     {:backoff,2,30,2,:normal,nil,nil}
-    2> b1 = ExBackoff.type(b0, jitter)
+    2> b1 = Exbackoff.type(b0, jitter)
     {:backoff,2,30,2,:jitter,nil,nil}
-    3> {_, b2} = ExBackoff.fail(b1)
+    3> {_, b2} = Exbackoff.fail(b1)
     {7, ...}
-    4> {_, b3} = ExBackoff.fail(b2)
+    4> {_, b3} = Exbackoff.fail(b2)
     {12, ...}
 
 Calling `type/2` with argument `:normal` will swap the backoff state back
 to its default behavior:
 
-    5> b4 = ExBackoff.type(b3, :normal)
+    5> b4 = Exbackoff.type(b3, :normal)
     {:backoff,2,30,12,:normal,nil,nil}
-    6> {_, b5} = ExBackoff.fail(b4)
+    6> {_, b5} = Exbackoff.fail(b4)
     {24, ...}
 
 ## Timeout Events
@@ -143,16 +143,16 @@ be given to the `init` function to deal with such state and fire events
 whenever necessary. We first initialize the backoff with `init(start, max,
 dest, message)`:
 
-    1> b = ExBackoff.init(5000, 20000, self(), :hello_world).
+    1> b = Exbackoff.init(5000, 20000, self(), :hello_world).
     ...
 
 Then by entering:
 
-    2> ExBackoff.fire(B). :timer.sleep(2500), flush(). :timer.sleep(3000), flush().
+    2> Exbackoff.fire(B). :timer.sleep(2500), flush(). :timer.sleep(3000), flush().
 
 and pressing enter, the following sequence of events will unfold:
 
-    3> ExBackoff.fire(B). :timer.sleep(2500), flush(). :timer.sleep(3000), flush().
+    3> Exbackoff.fire(B). :timer.sleep(2500), flush(). :timer.sleep(3000), flush().
     #Ref<0.0.0.719>
     4> :timer.sleep(2500), flush(). :timer.sleep(3000), flush().
     ok
@@ -160,7 +160,7 @@ and pressing enter, the following sequence of events will unfold:
     Shell got {timeout,#Ref<0.0.0.719>,hello_world}
     ok
 
-Showing that `ExBackoff.fire/1` generates a new timer, and returns the timer
+Showing that `Exbackoff.fire/1` generates a new timer, and returns the timer
 reference. This reference can be manipulated with `erlang:cancel_timer(Ref)`
 and `erlang:read_timer(Ref)`.
 
@@ -175,8 +175,5 @@ operations.
 
 ## TODO
 
-1. update readme
-2. check CI ok
-3. publish
-4. publish with docs
-5. add common task in readme
+1. publish
+2. add common task in readme
