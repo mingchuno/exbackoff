@@ -1,9 +1,21 @@
 language: elixir
-elixir:
-  - 1.4.1
+
 sudo: false
-otp_release:
-  - 19.0
-after_script:
-  - mix deps.get --only docs
-  - MIX_ENV=docs mix inch.report
+
+matrix:
+  include:
+  - elixir: 1.7
+    otp_release: 19.0
+  - elixir: 1.7
+    otp_release: 20.0
+  - elixir: 1.7
+    otp_release: 21.0
+  - elixir: 1.8
+    otp_release: 20.0
+  - elixir: 1.8
+    otp_release: 21.0
+
+script:
+  - mix test
+  # - mix format --check-formatted
+  

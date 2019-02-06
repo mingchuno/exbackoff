@@ -1,21 +1,21 @@
-defmodule Exbackoff.Mixfile do
+defmodule Exbackoff.MixProject do
   use Mix.Project
 
-  @version "0.0.4"
+  @version "0.1.0"
+  @repo_url "https://github.com/mingchuno/exbackoff"
 
   def project do
-    [app: :exbackoff,
-     version: @version,
-     elixir: "~> 1.4",
-     description: description(),
-     package: package(),
-     source_url: "https://github.com/mingchuno/exbackoff",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps(),
-     docs: [extras: ["README.md"], main: "readme",
-              source_ref: "v#{@version}",
-              source_url: "https://github.com/mingchuno/exbackoff"]
+    [
+      app: :exbackoff,
+      version: @version,
+      elixir: "~> 1.7",
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      deps: deps(),
+      description: description(),
+      package: package(),
+      source_url: @repo_url,
+      homepage_url: @repo_url
     ]
   end
 
@@ -25,24 +25,29 @@ defmodule Exbackoff.Mixfile do
     """
   end
 
-  def application do
-    [applications: [:logger]]
-  end
-
-  defp deps do
+  defp package do
     [
-      {:excheck, "~> 0.5.0", only: :test},
-      {:earmark, "~> 0.2", only: :docs},
-      {:ex_doc, "~> 0.11", only: :docs},
-      {:inch_ex, "~> 0.5", only: :docs},
-      {:triq, github: "triqng/triq", only: :test}
+      name: "exbackoff",
+      # files: ["lib", "mix.exs", "README.md", "LICENSE"],
+      maintainers: ["MC Or"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => @repo_url}
     ]
   end
 
-  defp package do
-    [files: ["lib", "mix.exs", "README.md", "LICENSE"],
-     maintainers: ["MC Or"],
-     licenses: ["MIT"],
-     links: %{"GitHub" => "https://github.com/mingchuno/exbackoff"}]
+  # Run "mix help compile.app" to learn about applications.
+  def application do
+    [
+      extra_applications: [:logger]
+    ]
+  end
+
+  # Run "mix help deps" to learn about dependencies.
+  defp deps do
+    [
+      {:excheck, "~> 0.6", only: :test},
+      {:triq, "~> 1.3", only: :test},
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false}
+    ]
   end
 end
