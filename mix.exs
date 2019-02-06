@@ -1,48 +1,32 @@
-defmodule Exbackoff.Mixfile do
+defmodule Exbackoff.MixProject do
   use Mix.Project
 
-  @version "0.0.4"
+  @version "0.1.0"
 
   def project do
-    [app: :exbackoff,
-     version: @version,
-     elixir: "~> 1.4",
-     description: description(),
-     package: package(),
-     source_url: "https://github.com/mingchuno/exbackoff",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps(),
-     docs: [extras: ["README.md"], main: "readme",
-              source_ref: "v#{@version}",
-              source_url: "https://github.com/mingchuno/exbackoff"]
+    [
+      app: :exbackoff,
+      version: @version,
+      elixir: "~> 1.8",
+      start_permanent: Mix.env() == :prod,
+      deps: deps()
     ]
   end
 
-  defp description do
-    """
-    Simple exponential backoffs in Elixir.
-    """
-  end
-
+  # Run "mix help compile.app" to learn about applications.
   def application do
-    [applications: [:logger]]
+    [
+      extra_applications: [:logger]
+    ]
   end
 
+  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:excheck, "~> 0.5.0", only: :test},
-      {:earmark, "~> 0.2", only: :docs},
-      {:ex_doc, "~> 0.11", only: :docs},
-      {:inch_ex, "~> 0.5", only: :docs},
-      {:triq, github: "triqng/triq", only: :test}
+      {:excheck, "~> 0.6", only: :test},
+      {:triq, "~> 1.3", only: :test},
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false}
+      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
-  end
-
-  defp package do
-    [files: ["lib", "mix.exs", "README.md", "LICENSE"],
-     maintainers: ["MC Or"],
-     licenses: ["MIT"],
-     links: %{"GitHub" => "https://github.com/mingchuno/exbackoff"}]
   end
 end

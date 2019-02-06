@@ -1,2 +1,2 @@
-ExCheck.start
-ExUnit.start
+ExCheck.start()
+ExUnit.start()

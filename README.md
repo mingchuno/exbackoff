@@ -175,4 +175,8 @@ operations.
 
 ## TODO
 
-1. complate the tests
+1. update readme
+2. check CI ok
+3. publish
+4. publish with docs
+5. add common task in readme

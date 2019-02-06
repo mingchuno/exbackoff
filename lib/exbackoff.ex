@@ -1,4 +1,4 @@
-defmodule ExBackoff do
+defmodule Exbackoff do
   use Bitwise
 
   @moduledoc """
@@ -9,24 +9,21 @@ defmodule ExBackoff do
 
   @typep max :: pos_integer | :infinity
 
-  defstruct [start: nil,
-             max: nil,
-             current: nil,
-             type: :normal,
-             value: nil,
-             dest: nil]
+  defstruct start: nil, max: nil, current: nil, type: :normal, value: nil, dest: nil
 
   @typedoc """
   struct contain state of the backoff module including the start, current and
   max value. Type of the backoff `:normal` or `:jitter`. Value to send and the
   destination when need to fire off message whe :timeout
   """
-  @type backoff :: %__MODULE__{ start: pos_integer,
-                                max: max,
-                                current: pos_integer,
-                                type: :normal | :jitter,
-                                value: any,
-                                dest: pid}
+  @type backoff :: %__MODULE__{
+          start: pos_integer,
+          max: max,
+          current: pos_integer,
+          type: :normal | :jitter,
+          value: any,
+          dest: pid
+        }
 
   @doc """
   Just do the increments by hand!
@@ -61,12 +58,15 @@ defmodule ExBackoff do
   def rand_increment(n, max) do
     # The largest interval for [0.5 * Time, 1.5 * Time] with maximum Max is
     # [Max div 3, Max].
-    max_min_delay = div max, 3
+    max_min_delay = div(max, 3)
+
     cond do
       max_min_delay === 0 ->
         :rand.uniform(max)
+
       n > max_min_delay ->
         rand_increment(max_min_delay)
+
       true ->
         rand_increment(n)
     end
@@ -79,7 +79,7 @@ defmodule ExBackoff do
   provided by this library
   """
   @spec init(pos_integer, max) :: backoff
-  def init(start, max), do: init(start, max, :nil, :nil)
+  def init(start, max), do: init(start, max, nil, nil)
 
   @doc """
   init function when the user feels like using a timer
@@ -87,7 +87,7 @@ defmodule ExBackoff do
   """
   @spec init(pos_integer, max, pid | nil, any | nil) :: backoff
   def init(start, max, dest, value) do
-    %ExBackoff{start: start, current: start, max: max, value: value, dest: dest}
+    %Exbackoff{start: start, current: start, max: max, value: value, dest: dest}
   end
 
   @doc """
@@ -96,7 +96,7 @@ defmodule ExBackoff do
   is purely a convenience function.
   """
   @spec fire(backoff) :: reference
-  def fire(%ExBackoff{current: delay, value: value, dest: dest}) do
+  def fire(%Exbackoff{current: delay, value: value, dest: dest}) do
     :erlang.start_timer(delay, dest, value)
   end
 
@@ -104,32 +104,35 @@ defmodule ExBackoff do
   Reads the current backoff value.
   """
   @spec get(backoff) :: pos_integer
-  def get(%ExBackoff{current: delay}), do: delay
+  def get(%Exbackoff{current: delay}), do: delay
 
   @doc """
   Swaps between the states of the backoff.
   """
   @spec type(backoff, :normal | :jitter) :: backoff
-  def type(b = %ExBackoff{}, :jitter), do: %{b | type: :jitter}
-  def type(b = %ExBackoff{}, :normal), do: %{b | type: :normal}
+  def type(b = %Exbackoff{}, :jitter), do: %{b | type: :jitter}
+  def type(b = %Exbackoff{}, :normal), do: %{b | type: :normal}
 
   @doc """
   Increments the value and return the new state with the `new_delay`
   """
   @spec fail(backoff) :: {pos_integer, backoff}
-  def fail(b = %ExBackoff{current: delay, max: :infinity, type: :normal}) do
+  def fail(b = %Exbackoff{current: delay, max: :infinity, type: :normal}) do
     new_delay = increment(delay)
-    {new_delay,  %{b | current: new_delay}}
+    {new_delay, %{b | current: new_delay}}
   end
-  def fail(b = %ExBackoff{current: delay, max: max, type: :normal}) do
+
+  def fail(b = %Exbackoff{current: delay, max: max, type: :normal}) do
     new_delay = increment(delay, max)
     {new_delay, %{b | current: new_delay}}
   end
-  def fail(b = %ExBackoff{current: delay, max: :infinity, type: :jitter}) do
+
+  def fail(b = %Exbackoff{current: delay, max: :infinity, type: :jitter}) do
     new_delay = rand_increment(delay)
     {new_delay, %{b | current: new_delay}}
   end
-  def fail(b = %ExBackoff{current: delay, max: max, type: :jitter}) do
+
+  def fail(b = %Exbackoff{current: delay, max: max, type: :jitter}) do
     new_delay = rand_increment(delay, max)
     {new_delay, %{b | current: new_delay}}
   end
@@ -138,7 +141,7 @@ defmodule ExBackoff do
   resets the values
   """
   @spec succeed(backoff) :: {pos_integer, backoff}
-  def succeed(b = %ExBackoff{start: start}) do
+  def succeed(b = %Exbackoff{start: start}) do
     {start, %{b | current: start}}
   end
 end
