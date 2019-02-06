@@ -91,7 +91,7 @@ defmodule Exbackoff do
   end
 
   @doc """
-  Starts a timer from the `backoff()' argument, using erlang:start_timer/3.
+  Starts a timer from the `backoff()` argument, using erlang:start_timer/3.
   No reference tracking is done, and this is left to the user. This function
   is purely a convenience function.
   """

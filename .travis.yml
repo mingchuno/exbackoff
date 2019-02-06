@@ -18,7 +18,4 @@ matrix:
 script:
   - mix test
   # - mix format --check-formatted
-
-# after_script:
-#   - mix deps.get --only docs
-#   - MIX_ENV=docs mix inch.report
+  
