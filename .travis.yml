@@ -2,20 +2,13 @@ language: elixir
 
 sudo: false
 
-matrix:
-  include:
-  - elixir: 1.7
-    otp_release: 19.0
-  - elixir: 1.7
-    otp_release: 20.0
-  - elixir: 1.7
-    otp_release: 21.0
-  - elixir: 1.8
-    otp_release: 20.0
-  - elixir: 1.8
-    otp_release: 21.0
+elixir: 
+  - 1.4
+  - 1.5
+  - 1.6
+  - 1.7
+  - 1.8
 
 script:
   - mix test
   # - mix format --check-formatted
-  

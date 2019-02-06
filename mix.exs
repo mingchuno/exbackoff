@@ -8,7 +8,7 @@ defmodule Exbackoff.MixProject do
     [
       app: :exbackoff,
       version: @version,
-      elixir: "~> 1.7",
+      elixir: "~> 1.4",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       deps: deps(),
