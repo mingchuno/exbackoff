@@ -22,7 +22,7 @@ in [ferd/backoff](https://github.com/ferd/backoff).
         [applications: [:exbackoff]]
 
 
-# Modes of Operation
+## Modes of Operation
 
 Backoff can be used in 3 main ways:
 
